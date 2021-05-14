@@ -1,0 +1,6 @@
+rootProject.name = "WorkLauncher"
+include ':app'
+include ':startup-compiler'
+include ':startup-api'
+include ':startup'
+include ':startup-runtime'
