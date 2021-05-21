@@ -1,10 +1,12 @@
 package io.geek.lib.startup;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 
 import java.util.List;
 
-public interface TaskCollector {
+@RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+interface TaskCollector {
 
     @Nullable
     List<Task> collect(String process);

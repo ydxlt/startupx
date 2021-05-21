@@ -6,27 +6,19 @@ import java.util.concurrent.Executor
 /**
  * Startup
  */
-object Startup {
+class Startup private constructor(
+    private var context: Context,
+    private var processName: String? = null,
+    private var backgroundExecutor: Executor? = null,
+    private var singleExecutor: Executor? = null
+) {
 
-    private val mScheduler: Scheduler by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { Scheduler() }
-    private var mProcessName:String? = null
-
-    fun setExecutor(executor: Executor): Startup {
-        mScheduler.setExecutor(executor)
-        return this
+    private val mScheduler: Scheduler by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        Scheduler().context(context).backgroundExecutor(backgroundExecutor)
+            .singleExecutor(singleExecutor)
     }
 
-    fun setContext(context: Context): Startup {
-        mScheduler.setContext(context)
-        return this
-    }
-
-    fun setProcessName(processName:String) : Startup {
-        mProcessName = processName
-        return this
-    }
-
-    fun launch() {
+    fun proceed() {
         val tasks = collectTasks() ?: return
         mScheduler.schedule(tasks)
     }
@@ -35,10 +27,23 @@ object Startup {
         try {
             val collector: TaskCollector = Class.forName("io.geek.lib.startup.TaskCollector_Impl")
                 .newInstance() as TaskCollector
-            return collector.collect(mProcessName)
+            return collector.collect(processName)
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return mutableListOf()
+        return null
+    }
+
+    companion object {
+        inline fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
+    }
+
+    class Builder {
+        lateinit var context: Context
+        var processName: String? = null
+        var backgroundExecutor: Executor? = null
+        var singleExecutor: Executor? = null
+
+        fun build() = Startup(context, processName, backgroundExecutor, singleExecutor)
     }
 }

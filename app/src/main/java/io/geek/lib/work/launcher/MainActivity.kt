@@ -14,7 +14,10 @@ class MainActivity : AppCompatActivity() {
 
     fun start(v: View){
         Thread{
-            Startup.setProcessName("web").setContext(this).launch()
+            Startup.build {
+                context = this@MainActivity
+                processName = "web"
+            }.proceed()
         }.start()
     }
 }
