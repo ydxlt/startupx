@@ -3,6 +3,9 @@ package io.geek.lib.startup
 import android.content.Context
 import java.util.concurrent.Executor
 
+/**
+ * Startup
+ */
 object Startup {
 
     private val mScheduler: Scheduler by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { Scheduler() }
