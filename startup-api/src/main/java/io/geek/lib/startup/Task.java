@@ -1,7 +1,8 @@
 package io.geek.lib.startup;
 
-import android.content.Context;
+import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
@@ -38,5 +39,5 @@ public interface Task {
         return null;
     }
 
-    void execute(@Nullable Context context);
+    void execute(@NonNull Application context);
 }

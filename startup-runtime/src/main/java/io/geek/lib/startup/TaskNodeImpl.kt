@@ -1,13 +1,13 @@
 package io.geek.lib.startup
 
-import android.content.Context
+import android.app.Application
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author xluotong@gmail.com
  */
 internal class TaskNodeImpl (
-    private val context: Context?,
+    private val application: Application,
     private val scheduler: Scheduler,
     private val task:Task
 ) : TaskNode {
@@ -22,7 +22,7 @@ internal class TaskNodeImpl (
 
     override fun execute() {
         val action = {
-            task.execute(context)
+            task.execute(application)
             children.sortByDescending {
                 it.priority()
             }

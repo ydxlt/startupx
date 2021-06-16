@@ -93,7 +93,7 @@ public class TaskWrapperHelper {
         return MethodSpec.methodBuilder("execute")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(ClassName.get("android.content", "Context"), "context")
+                .addParameter(ClassName.get("android.app", "Application"), "context")
                 .addStatement("mTask.execute(context)")
                 .build();
     }

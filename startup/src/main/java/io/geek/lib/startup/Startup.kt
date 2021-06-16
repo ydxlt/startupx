@@ -1,5 +1,6 @@
 package io.geek.lib.startup
 
+import android.app.Application
 import android.content.Context
 import java.util.concurrent.Executor
 
@@ -7,7 +8,7 @@ import java.util.concurrent.Executor
  * Startup
  */
 class Startup private constructor(
-    private var context: Context,
+    private var context: Application,
     private var processName: String? = null,
     private var backgroundExecutor: Executor? = null,
     private var singleExecutor: Executor? = null
@@ -39,7 +40,7 @@ class Startup private constructor(
     }
 
     class Builder {
-        lateinit var context: Context
+        lateinit var context: Application
         var processName: String? = null
         var backgroundExecutor: Executor? = null
         var singleExecutor: Executor? = null

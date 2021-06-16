@@ -1,6 +1,6 @@
 package io.geek.lib.startup
 
-import android.content.Context
+import android.app.Application
 import android.os.Process
 import androidx.annotation.RestrictTo
 import java.util.concurrent.*
@@ -12,7 +12,7 @@ class Scheduler {
     private var backgroundExecutor: Executor? = null
     private val mainExecutor: Executor by lazy { MainThreadExecutor() }
     private var singleExecutor: Executor? = null
-    private var context: Context? = null
+    private var application: Application? = null
     internal val BACKGROUND: Executor
         get() {
             if (backgroundExecutor != null) {
@@ -66,8 +66,8 @@ class Scheduler {
         return this
     }
 
-    fun context(context: Context): Scheduler {
-        this.context = context
+    fun context(application: Application): Scheduler {
+        this.application = application
         return this
     }
 
@@ -79,6 +79,9 @@ class Scheduler {
     }
 
     fun schedule(taskList: List<Task>) {
+        if(application == null){
+            return
+        }
         // 1. 检测是否有环
         taskList.checkCycle()
         // 2. 从根任务开始执行
@@ -99,7 +102,7 @@ class Scheduler {
         val taskClassNames = mutableListOf<String>()
         taskList.forEach { task ->
             val scheduleTask =
-                TaskNodeImpl(context, this@Scheduler, task)
+                TaskNodeImpl(application!!, this@Scheduler, task)
             scheduleTaskMap[task::class.java] = scheduleTask
             scheduleTasks.add(scheduleTask)
             taskClassNames.add(task::class.java.canonicalName)
